@@ -1,0 +1,20 @@
+[
+    {
+        "type": "URL",
+        "content": "http://example.com/login",
+        "risk": 60,
+        "status": "SUSPICIOUS"
+    },
+    {
+        "type": "URL",
+        "content": "http://example.com/login",
+        "risk": 60,
+        "status": "SUSPICIOUS"
+    },
+    {
+        "type": "QR",
+        "content": "sample",
+        "risk": 20,
+        "status": "SAFE"
+    }
+]
