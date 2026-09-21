@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Scan History</h2>
+
+<div class="history-card mt-4">
+
+<table class="table table-hover">
+
+<thead>
+
+<tr>
+    <th>Scan Type</th>
+    <th>Input</th>
+    <th>Prediction</th>
+    <th>Confidence</th>
+    <th>Date</th>
+</tr>
+
+</thead>
+
+<tbody>
+
+{% for item in history %}
+
+<tr>
+
+<td>{{ item.scan_type }}</td>
+
+<td>{{ item.input_data }}</td>
+
+<td>
+
+{% if item.prediction=="Safe" %}
+
+<span class="badge bg-success">Safe</span>
+
+{% else %}
+
+<span class="badge bg-danger">Scam</span>
+
+{% endif %}
+
+</td>
+
+<td>{{ item.confidence }}%</td>
+
+<td>{{ item.created_at.strftime('%d-%m-%Y %I:%M %p') }}</td>
+
+</tr>
+
+{% endfor %}
+
+</tbody>
+
+</table>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,234 @@
+/* ================= HOME PAGE ================= */
+
+.hero-section{
+    background: linear-gradient(135deg,#081B44,#2563EB,#5B21B6);
+    color:white;
+    padding:110px 0 80px;
+    border-radius:0 0 35px 35px;
+    overflow:hidden;
+}
+
+.hero-badge{
+    display:inline-block;
+    padding:10px 20px;
+    border-radius:30px;
+    background:rgba(255,255,255,.15);
+    font-size:15px;
+    margin-bottom:25px;
+}
+
+.hero-title{
+    font-size:54px;
+    font-weight:800;
+    line-height:1.2;
+    margin-bottom:20px;
+}
+
+.hero-description{
+    font-size:18px;
+    color:#E2E8F0;
+    line-height:1.8;
+    margin-bottom:30px;
+}
+
+.hero-buttons{
+    display:flex;
+    gap:18px;
+    flex-wrap:wrap;
+}
+
+.hero-btn{
+    padding:14px 34px;
+    font-size:18px;
+    font-weight:600;
+    border-radius:15px;
+}
+
+.hero-login-btn{
+    padding:14px 34px;
+    border-radius:15px;
+    border:2px solid white;
+    color:white;
+    font-weight:600;
+}
+
+.hero-login-btn:hover{
+    background:white;
+    color:#1E40AF;
+}
+
+/* IMPORTANT FIX - NO OVERLAP */
+
+.hero-section img{
+    max-width:360px;
+    width:100%;
+    height:auto;
+    animation:floatShield 4s ease-in-out infinite;
+    filter:drop-shadow(0 15px 30px rgba(0,0,0,.25));
+}
+
+@keyframes floatShield{
+    0%{transform:translateY(0);}
+    50%{transform:translateY(-12px);}
+    100%{transform:translateY(0);}
+}
+
+/* FEATURES */
+
+.features-section{
+    padding:80px 0;
+    background:#F8FAFC;
+}
+
+.section-heading{
+    font-size:38px;
+    font-weight:700;
+    color:#0F172A;
+}
+
+.section-text{
+    color:#64748B;
+    font-size:17px;
+}
+
+.feature-card{
+    background:white;
+    padding:30px;
+    border-radius:20px;
+    text-align:center;
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+    transition:.3s;
+    height:100%;
+}
+
+.feature-card:hover{
+    transform:translateY(-8px);
+    background:#2563EB;
+    color:white;
+}
+
+.feature-card:hover p,
+.feature-card:hover .feature-icon{
+    color:white;
+}
+
+.feature-icon{
+    font-size:45px;
+    color:#2563EB;
+    margin-bottom:15px;
+}
+
+/* STATS */
+
+.stats-section{
+    background:#2563EB;
+    color:white;
+    padding:70px 0;
+}
+
+.stat-box h2{
+    font-size:48px;
+    font-weight:700;
+}
+
+.stat-box p{
+    margin-top:10px;
+}
+
+/* HOW IT WORKS */
+
+.work-section{
+    padding:80px 0;
+    background:white;
+}
+
+.work-card{
+    background:#F8FAFC;
+    border-radius:20px;
+    padding:30px;
+    height:100%;
+    box-shadow:0 8px 20px rgba(0,0,0,.06);
+}
+
+.step-circle{
+    width:60px;
+    height:60px;
+    margin:auto;
+    margin-bottom:20px;
+    border-radius:50%;
+    background:#2563EB;
+    color:white;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:22px;
+    font-weight:700;
+}
+
+/* MOBILE */
+
+@media(max-width:992px){
+
+.hero-section{
+    text-align:center;
+}
+
+.hero-title{
+    font-size:36px;
+}
+
+.hero-buttons{
+    justify-content:center;
+}
+
+.hero-section img{
+    max-width:260px;
+    margin-top:30px;
+}
+
+.section-heading{
+    font-size:30px;
+}
+/* ================= NAVBAR LOGIN BUTTON ================= */
+
+.custom-navbar{
+    background:#081B44;
+    padding:16px 0;
+    box-shadow:0 4px 15px rgba(0,0,0,0.15);
+}
+
+.custom-navbar .navbar-brand{
+    color:#ffffff;
+    font-size:24px;
+    font-weight:700;
+}
+
+.custom-navbar .nav-link{
+    color:#E2E8F0 !important;
+    font-weight:500;
+    margin-right:15px;
+}
+
+.custom-navbar .nav-link:hover{
+    color:#ffffff !important;
+}
+
+/* Top Right Login Button */
+
+.navbar-login-btn{
+    background:#22C55E;
+    color:white !important;
+    border:none;
+    border-radius:30px;
+    padding:10px 24px;
+    font-weight:600;
+    transition:0.3s ease;
+}
+
+.navbar-login-btn:hover{
+    background:#16A34A;
+    color:white !important;
+    transform:translateY(-2px);
+}
+
+}

@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% block content %}
+
+<section class="result-page">
+
+<div class="result-container">
+
+<h2>SMS Analysis Result</h2>
+
+{% set scan_result = result|default({}, true) %}
+{% set prediction = scan_result.prediction|default('Scam', true) %}
+{% set confidence = scan_result.confidence|default(0, true) %}
+{% set reasons = scan_result.reasons|default([], true) %}
+
+<div class="url-display">{{ message|default('No message provided', true) }}</div>
+
+{% if prediction == "Safe" %}
+
+<div class="safe-result">
+<h1>SAFE MESSAGE</h1>
+</div>
+
+{% else %}
+
+<div class="danger-result">
+<h1>SCAM MESSAGE DETECTED</h1>
+</div>
+
+{% endif %}
+
+<div class="confidence-card">
+
+<h4>AI Confidence Score</h4>
+
+<div class="progress confidence-progress">
+
+<div
+class="progress-bar {{ 'bg-success' if prediction == 'Safe' else 'bg-danger' }}"
+data-confidence="{{ confidence }}"
+style="width: 0%;"
+role="progressbar"
+aria-valuenow="{{ confidence }}"
+aria-valuemin="0"
+aria-valuemax="100"
+>
+
+{{ confidence }}%
+
+</div>
+
+</div>
+
+</div>
+
+<div class="reason-card">
+
+<h4>AI Reasons</h4>
+
+<ul>
+
+{% for reason in reasons %}
+
+<li>{{ reason }}</li>
+
+{% endfor %}
+
+</ul>
+
+</div>
+
+<a href="{{ url_for('sms_scan') }}" class="btn btn-primary scanner-btn mt-4">
+Scan Another SMS
+</a>
+
+</div>
+
+</section>
+
+<script>
+	const confidenceBar = document.querySelector("[data-confidence]");
+	if (confidenceBar) {
+		const confidence = Math.min(Math.max(Number(confidenceBar.dataset.confidence) || 0, 0), 100);
+		confidenceBar.style.width = `${confidence}%`;
+	}
+</script>
+
+{% endblock %}

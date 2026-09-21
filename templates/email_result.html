@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<section class="result-page">
+
+    <div class="result-container">
+
+        <h2>Email Scan Result</h2>
+
+        {% set scan_result = result|default({}, true) %}
+        {% set prediction = scan_result.prediction|default('Scam', true) %}
+        {% set confidence = scan_result.confidence|default(0, true) %}
+        {% set reasons = scan_result.reasons|default([], true) %}
+
+        <!-- Email Subject -->
+        <h5>{{ subject|default('No subject provided', true) }}</h5>
+
+        <!-- Email Content -->
+        <div class="url-display">
+            {{ body|default('No email content provided', true) }}
+        </div>
+
+        <!-- Scan Result -->
+        {% if prediction == "Safe" %}
+
+            <div class="safe-result">
+                <h1>SAFE EMAIL</h1>
+            </div>
+
+        {% else %}
+
+            <div class="danger-result">
+                <h1>PHISHING EMAIL DETECTED</h1>
+            </div>
+
+        {% endif %}
+
+
+        <!-- AI Confidence Score -->
+        <div class="confidence-card">
+
+            <h4>AI Confidence Score</h4>
+
+            <div class="progress confidence-progress">
+
+                <div
+                    class="progress-bar {{ 'bg-success' if prediction == 'Safe' else 'bg-danger' }}"
+                    role="progressbar"
+                    data-confidence="{{ confidence }}"
+                    style="width: 0%;"
+                    aria-valuenow="{{ confidence }}"
+                    aria-valuemin="0"
+                    aria-valuemax="100"
+                >
+                    {{ confidence }}%
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- AI Reasons -->
+        <div class="reason-card">
+
+            <h4>AI Reasons</h4>
+
+            <ul>
+
+                {% for reason in reasons %}
+
+                    <li>{{ reason }}</li>
+
+                {% endfor %}
+
+            </ul>
+
+        </div>
+
+
+        <!-- Scan Another Email -->
+        <a
+            href="{{ url_for('email_scan') }}"
+            class="btn btn-primary scanner-btn mt-4"
+        >
+            Scan Another Email
+        </a>
+
+    </div>
+
+</section>
+
+<script>
+    const confidenceBar = document.querySelector("[data-confidence]");
+    if (confidenceBar) {
+        const confidence = Math.min(Math.max(Number(confidenceBar.dataset.confidence) || 0, 0), 100);
+        confidenceBar.style.width = `${confidence}%`;
+    }
+</script>
+
+{% endblock %}

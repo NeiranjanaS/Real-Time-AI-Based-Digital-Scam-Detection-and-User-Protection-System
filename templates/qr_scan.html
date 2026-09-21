@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block content %}
+
+<section class="scanner-page">
+
+<div class="scanner-box">
+
+<h2>📱 AI QR Code Scam Detector</h2>
+
+<p>
+Upload a QR code image.
+CyberShield AI will decode it and analyze phishing risk instantly.
+</p>
+
+<form method="POST" enctype="multipart/form-data">
+
+<div class="upload-area">
+
+<input
+type="file"
+name="qr_image"
+accept="image/*"
+required
+class="form-control scanner-input"
+>
+
+</div>
+
+<button class="btn btn-primary scanner-btn">
+
+Scan QR Code
+
+</button>
+
+</form>
+
+</div>
+
+</section>
+
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block content %}
+
+<section class="scanner-page">
+
+<div class="scanner-box">
+
+<h2>📧 Email Phishing Detector</h2>
+
+<p>
+Paste the email subject and body.
+CyberShield AI will identify phishing emails.
+</p>
+
+<form method="POST">
+
+<input
+type="text"
+name="subject"
+class="form-control scanner-input mb-3"
+placeholder="Email Subject"
+required
+>
+
+<textarea
+name="body"
+rows="8"
+class="form-control scanner-textarea"
+placeholder="Paste Email Content"
+required
+></textarea>
+
+<button class="btn btn-primary scanner-btn">
+Analyze Email
+</button>
+
+</form>
+
+</div>
+
+</section>
+
+{% endblock %}

@@ -1,0 +1,13 @@
+email,label
+"Hi team, the meeting agenda is attached for tomorrow's review.",safe
+"Your monthly account statement is available in the customer portal.",safe
+"Please confirm your attendance at the project presentation.",safe
+"Thanks for submitting the report. We will review it this week.",safe
+"Your order has shipped and can be tracked from our official website.",safe
+"The office will be closed on Friday for the public holiday.",safe
+"Urgent: your account will be suspended unless you verify your password at this link.",phishing
+"You have won a prize. Send your bank details to receive the reward immediately.",phishing
+"Security alert: click here to confirm your login or your account will be deleted.",phishing
+"Your invoice is overdue. Open the attached file and enable macros to avoid a penalty.",phishing
+"We detected unusual activity. Reply with your password and one-time code.",phishing
+"Claim your exclusive refund by signing in through this shortened link today.",phishing

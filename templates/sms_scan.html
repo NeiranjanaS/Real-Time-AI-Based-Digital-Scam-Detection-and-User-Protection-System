@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+
+<section class="scanner-page">
+
+<div class="scanner-box">
+
+<h2>💬 SMS Scam Detector</h2>
+
+<p>
+Paste any SMS message below.
+CyberShield AI will detect fraud, OTP scams, lottery scams and phishing messages.
+</p>
+
+<form method="POST">
+
+<textarea
+name="sms"
+class="form-control scanner-textarea"
+rows="8"
+placeholder="Paste SMS here..."
+required
+></textarea>
+
+<button class="btn btn-primary scanner-btn">
+Analyze SMS
+</button>
+
+</form>
+
+</div>
+
+</section>
+
+{% endblock %}

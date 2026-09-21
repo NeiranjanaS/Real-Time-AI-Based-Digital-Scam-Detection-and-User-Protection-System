@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+
+<section class="scanner-page">
+
+<div class="scanner-box">
+
+    <h2>🌐 AI URL Scam Detector</h2>
+
+    <p>
+        Enter any website URL below.
+        CyberShield AI will detect phishing attacks in real time.
+    </p>
+
+    <form method="POST">
+
+        <input
+            type="url"
+            name="url"
+            class="form-control scanner-input"
+            placeholder="https://example.com"
+            required
+        >
+
+        <button class="btn btn-primary scanner-btn">
+            Scan URL
+        </button>
+
+    </form>
+
+</div>
+
+</section>
+
+{% endblock %}

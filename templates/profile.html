@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="profile-card">
+
+<div class="profile-image">
+
+<img src="{{ url_for('static', filename='images/user.png') }}">
+
+</div>
+
+<h2>{{ current_user.fullname }}</h2>
+
+<p>{{ current_user.email }}</p>
+
+<hr>
+
+<div class="row text-center">
+
+<div class="col">
+
+<h5>Member Since</h5>
+
+<p>{{ current_user.created_at.strftime('%B %Y') }}</p>
+
+</div>
+
+<div class="col">
+
+<h5>Security Level</h5>
+
+<p class="text-success">Protected</p>
+
+</div>
+
+</div>
+
+<a href="/dashboard" class="btn btn-primary mt-3">Back to Dashboard</a>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="result-page">
+    <div class="result-container">
+        <h2>Scan Result</h2>
+        <div class="url-display">{{ url }}</div>
+
+        {% if result.prediction == "Safe" %}
+            <div class="safe-result">
+                <h1>SAFE WEBSITE</h1>
+                <p>No phishing indicators were detected.</p>
+            </div>
+        {% else %}
+            <div class="danger-result">
+                <h1>SCAM DETECTED</h1>
+                <p>This website looks suspicious.</p>
+            </div>
+        {% endif %}
+
+        <div class="confidence-card">
+            <h4>AI Confidence Score</h4>
+            {% set confidence_class = "bg-success" if result.prediction == "Safe" else "bg-danger" %}
+            <div class="progress confidence-progress">
+                <div
+                    class="progress-bar {{ confidence_class }}"
+                    role="progressbar"
+                    data-confidence="{{ result.confidence }}"
+                    style="width: 0%;"
+                    aria-valuenow="{{ result.confidence }}"
+                    aria-valuemin="0"
+                    aria-valuemax="100"
+                >
+                    {{ result.confidence }}%
+                </div>
+            </div>
+        </div>
+
+        <div class="reason-card">
+            <h4>Why did AI predict this?</h4>
+            <ul>
+                {% for reason in result.reasons %}
+                    <li>{{ reason }}</li>
+                {% else %}
+                    <li>No additional reasons were recorded.</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="tips-card mt-4">
+            <h4>Protection Tips</h4>
+            <ul>
+                <li>Verify the domain before entering passwords.</li>
+                <li>Never click unknown banking links.</li>
+                <li>Check HTTPS certificate carefully.</li>
+                <li>Report suspicious websites immediately.</li>
+            </ul>
+        </div>
+
+        <a href="{{ url_for('url_scan') }}" class="btn btn-primary mt-4 w-100">
+            Scan Another URL
+        </a>
+    </div>
+</section>
+
+<script>
+    const confidenceBar = document.querySelector("[data-confidence]");
+    if (confidenceBar) {
+        const confidence = Math.min(Math.max(Number(confidenceBar.dataset.confidence) || 0, 0), 100);
+        confidenceBar.style.width = `${confidence}%`;
+    }
+</script>
+{% endblock %}

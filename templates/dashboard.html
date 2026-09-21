@@ -1,0 +1,171 @@
+{% extends "base.html" %}
+{% block content %}
+
+<!-- Welcome Card -->
+
+<section class="welcome-card">
+
+<div>
+
+<h2>Hello {{ current_user.fullname }} 👋</h2>
+
+<p>CyberShield AI is actively monitoring your digital safety.</p>
+
+</div>
+
+<div>
+
+<button class="scan-btn">
+<i class="bi bi-shield-check"></i>
+Protected
+</button>
+
+</div>
+
+</section>
+
+<!-- Statistics -->
+
+<div class="row g-4 mt-2">
+
+<div class="col-md-4">
+<div class="stat-card blue">
+<i class="bi bi-search-heart-fill"></i>
+<h3>{{ scans }}</h3>
+<p>Total Scans</p>
+</div>
+</div>
+
+<div class="col-md-4">
+<div class="stat-card green">
+<i class="bi bi-shield-check"></i>
+<h3>{{ safe }}</h3>
+<p>Safe Results</p>
+</div>
+</div>
+
+<div class="col-md-4">
+<div class="stat-card red">
+<i class="bi bi-shield-exclamation"></i>
+<h3>{{ scam }}</h3>
+<p>Scam Detected</p>
+</div>
+</div>
+
+</div>
+
+<!-- Quick Scanner -->
+
+<h3 class="mt-5 mb-3">Quick AI Scanner</h3>
+
+<div class="scanner-grid">
+
+<a href="/url_scan" class="scanner-card">
+<i class="bi bi-globe2"></i>
+<h5>URL Scanner</h5>
+<p>Detect malicious websites instantly.</p>
+</a>
+
+<a href="/qr_scan" class="scanner-card">
+<i class="bi bi-qr-code"></i>
+<h5>QR Scanner</h5>
+<p>Scan suspicious QR codes safely.</p>
+</a>
+
+<a href="/sms_scan" class="scanner-card">
+<i class="bi bi-chat-left-text"></i>
+<h5>SMS Detector</h5>
+<p>Analyze scam SMS messages.</p>
+</a>
+
+<a href="/email_scan" class="scanner-card">
+<i class="bi bi-envelope"></i>
+<h5>Email Detector</h5>
+<p>Detect phishing emails instantly.</p>
+</a>
+
+</div>
+
+<!-- Recent History -->
+
+<div class="row mt-5">
+
+<div class="col-lg-8">
+
+<div class="history-panel">
+
+<h4>Recent Scan Activity</h4>
+
+<table class="table table-borderless align-middle">
+
+<thead>
+
+<tr>
+
+<th>Scan Type</th>
+<th>Status</th>
+<th>Date</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+{% for item in history %}
+
+<tr>
+
+<td>{{ item.scan_type }}</td>
+
+<td>
+
+{% if item.prediction=="Safe" %}
+
+<span class="badge bg-success">Safe</span>
+
+{% else %}
+
+<span class="badge bg-danger">Scam</span>
+
+{% endif %}
+
+</td>
+
+<td>{{ item.created_at.strftime('%d-%m-%Y') }}</td>
+
+</tr>
+
+{% endfor %}
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+<div class="col-lg-4">
+
+<div class="tips-panel">
+
+<h4>AI Security Tips</h4>
+
+<ul>
+
+<li>Don't click shortened links.</li>
+<li>Never share OTP or PIN.</li>
+<li>Verify payment screenshots.</li>
+<li>Preview QR destinations.</li>
+<li>Enable 2-Factor Authentication.</li>
+
+</ul>
+
+</div>
+
+</div>
+
+</div>
+
+{% endblock %}
