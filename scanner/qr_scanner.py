@@ -1,46 +1,161 @@
 import cv2
+import numpy as np
+from PIL import Image
+import os
 
 try:
-    import zxingcpp
-except ImportError:
-    zxingcpp = None
+    from pyzbar.pyzbar import decode as pyzbar_decode
+except (ImportError, OSError):
+    pyzbar_decode = None
+
+# Import URL phishing detector
+from scanner.url_scanner import scan_url
+
+
+def preprocess_image(image_path):
+    """
+    Improve QR detection for screenshots and camera photos.
+    """
+
+    img = cv2.imread(image_path)
+
+    if img is None:
+        return None
+
+    # Resize large images
+    height, width = img.shape[:2]
+    if width > 1200:
+        scale = 1200 / width
+        img = cv2.resize(img, None, fx=scale, fy=scale)
+
+    # Convert to grayscale
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
+    # Increase contrast
+    gray = cv2.equalizeHist(gray)
+
+    # Remove noise
+    blur = cv2.GaussianBlur(gray, (3,3), 0)
+
+    # Adaptive threshold
+    thresh = cv2.adaptiveThreshold(
+        blur,
+        255,
+        cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
+        cv2.THRESH_BINARY,
+        11,
+        2
+    )
+
+    return img, gray, thresh
 
 
 def decode_qr(image_path):
-    image = cv2.imread(image_path)
-    if image is None:
+    """
+    Try multiple methods to decode QR.
+    """
+
+    processed = preprocess_image(image_path)
+
+    if processed is None:
         return None
 
-    if zxingcpp is not None:
-        for barcode in zxingcpp.read_barcodes(image):
-            if barcode.text:
-                return barcode.text
+    original, gray, thresh = processed
 
-    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    variants = [image, gray]
+    if pyzbar_decode is not None:
+        # ---------- Method 1 : Pyzbar Original ----------
+        decoded = pyzbar_decode(original)
+        if decoded:
+            return decoded[0].data.decode("utf-8")
 
-    # WhatsApp images are often compressed or scaled down, so give the
-    # detector higher-contrast and larger inputs as well as the original.
-    if max(gray.shape) < 1600:
-        variants.append(cv2.resize(gray, None, fx=2, fy=2, interpolation=cv2.INTER_CUBIC))
+        # ---------- Method 2 : Grayscale ----------
+        decoded = pyzbar_decode(gray)
+        if decoded:
+            return decoded[0].data.decode("utf-8")
 
-    variants.extend([
-        cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1],
-        cv2.adaptiveThreshold(
-            gray, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 31, 5
-        ),
-    ])
+        # ---------- Method 3 : Threshold Image ----------
+        decoded = pyzbar_decode(thresh)
+        if decoded:
+            return decoded[0].data.decode("utf-8")
 
+    # ---------- Method 4 : OpenCV QRCodeDetector ----------
     detector = cv2.QRCodeDetector()
-    for variant in variants:
-        decoded_text, _, _ = detector.detectAndDecode(variant)
-        if decoded_text:
-            return decoded_text
 
-        multi_result = detector.detectAndDecodeMulti(variant)
-        if multi_result[0]:
-            for decoded_text in multi_result[1]:
-                if decoded_text:
-                    return decoded_text
+    data, bbox, _ = detector.detectAndDecode(original)
+    if data:
+        return data
+
+    data, bbox, _ = detector.detectAndDecode(gray)
+    if data:
+        return data
+
+    data, bbox, _ = detector.detectAndDecode(thresh)
+    if data:
+        return data
 
     return None
+
+
+def analyze_qr(image_path):
+    """
+    Analyze uploaded QR code.
+    """
+
+    qr_content = decode_qr(image_path)
+
+    if qr_content is None:
+        return {
+            "prediction": "Unreadable QR Code",
+            "confidence": 0,
+            "decoded_url": "",
+            "reasons": [
+                "QR code could not be detected.",
+                "Image may be damaged or not contain a QR code."
+            ]
+        }
+
+    # If QR contains URL -> AI URL Scanner
+    if qr_content.startswith("http://") or qr_content.startswith("https://"):
+        result = scan_url(qr_content)
+
+        return {
+            "prediction": result["prediction"],
+            "confidence": result["confidence"],
+            "decoded_url": qr_content,
+            "reasons": result["reasons"]
+        }
+
+    # WhatsApp QR
+    if "whatsapp" in qr_content.lower():
+        return {
+            "prediction": "Safe",
+            "confidence": 98,
+            "decoded_url": qr_content,
+            "reasons": [
+                "WhatsApp QR code detected.",
+                "No phishing URL found."
+            ]
+        }
+
+    # UPI QR
+    if qr_content.startswith("upi://"):
+        return {
+            "prediction": "Safe",
+            "confidence": 96,
+            "decoded_url": qr_content,
+            "reasons": [
+                "UPI payment QR detected.",
+                "Verify receiver name before payment."
+            ]
+        }
+
+    # Other QR Content
+    return {
+        "prediction": "Safe",
+        "confidence": 90,
+        "decoded_url": qr_content,
+        "reasons": [
+            "QR code decoded successfully.",
+            "No malicious URL detected."
+        ]
+    }
